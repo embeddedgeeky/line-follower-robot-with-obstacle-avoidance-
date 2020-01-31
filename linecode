@@ -1,0 +1,124 @@
+/*coded by Er. Chinmay Kolhatkar
+  Dated: 26/12/2019
+  All rights Reserved by Arduino.cc 
+*/
+const int trigPin = 3;
+const int echoPin = 4;
+long duration;
+int distance;
+
+void setup() 
+{
+  pinMode(A1,OUTPUT);
+  pinMode(A2,OUTPUT);
+  pinMode(A3,OUTPUT);
+  pinMode(A4,OUTPUT);
+  pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
+  pinMode(echoPin, INPUT); // Sets the echoPin as an Input
+  digitalWrite(A1,0);
+  digitalWrite(A2,0);
+  digitalWrite(A3,0);
+  digitalWrite(A4,0);
+  pinMode(2,INPUT);
+  pinMode(11,INPUT);
+}
+uint16_t get_height()
+{
+digitalWrite(trigPin, LOW);
+delayMicroseconds(2);
+digitalWrite(trigPin, HIGH);
+delayMicroseconds(10);
+digitalWrite(trigPin, LOW);
+duration = pulseIn(echoPin, HIGH);
+distance= duration*0.034/2;
+return distance;
+}
+void forward()
+{
+  digitalWrite(A1,1);
+    digitalWrite(A2,0);
+      digitalWrite(A3,1);
+        digitalWrite(A4,0);
+        delay(10);
+}
+void backward()
+{
+  digitalWrite(A1,0);
+    digitalWrite(A2,1);
+      digitalWrite(A3,0);
+        digitalWrite(A4,1);
+        delay(10);
+}
+void right()
+{
+  digitalWrite(A1,1);
+    digitalWrite(A2,0);
+      digitalWrite(A3,0);
+        digitalWrite(A4,0);
+        delay(10);
+}
+void left()
+{
+  digitalWrite(A1,0);
+    digitalWrite(A2,0);
+      digitalWrite(A3,1);
+        digitalWrite(A4,0);
+        delay(10);
+}
+void turn_around()
+{
+  digitalWrite(A1,1);
+    digitalWrite(A2,0);
+      digitalWrite(A3,0);
+        digitalWrite(A4,1);
+}
+void _stop()
+{
+  digitalWrite(A1,0);
+    digitalWrite(A2,0);
+      digitalWrite(A3,0);
+        digitalWrite(A4,0);
+        delay(10);
+}
+void loop() 
+{
+ uint16_t value=get_height();
+ if(value<8)
+{
+  _stop();
+   delay(100);
+    right();
+    delay(500);
+    forward();
+    delay(300);
+    left();
+    delay(900);
+}
+else
+{
+   if(digitalRead(2)==0&&digitalRead(11)==0)
+  {
+    forward();
+  }
+  else if(digitalRead(2)==0&&digitalRead(11)==1)
+  {
+    right();
+  }
+  else if(digitalRead(2)==1&&digitalRead(11)==0)
+  {
+    left();
+  }
+  else if(digitalRead(2)==1&&digitalRead(11)==1)
+  {
+    _stop();
+    delay(100);
+    backward();
+    delay(400);
+    turn_around();
+    delay(900);
+    _stop();
+    delay(300);
+  }
+}
+
+}
